@@ -1,0 +1,274 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "GovStack Payment Building Block internal VMS API Preactivation",
+    "description": "This API is a Payment Building Block Payments internal API. It is called by the Payment BB Orchestrator to request an unused voucher number, serial number and expiry date from the Voucher Management Server.",
+    "contact": {
+      "email": "oscar.correia@maarifaeducation.com"
+    },
+    "version": "v1.0-oas4"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/VMS-API2/GS_PBBi_Preactivation/v1.0"
+    }
+  ],
+  "security": [
+    {
+      "app_id": []
+    }
+  ],
+  "paths": {
+    "/voucher_preactivate": {
+      "post": {
+        "description": "Request for voucher number by sending voucher group",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Voucher_preactivate_request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully pre-activated voucher",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/preactivation_response"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid resquest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalid_preactivation_request"
+                }
+              }
+            }
+          },
+          "452": {
+            "description": "Invalid amount",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalid_amount"
+                }
+              }
+            }
+          },
+          "453": {
+            "description": "Invalid currency",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalid_currency"
+                }
+              }
+            }
+          },
+          "454": {
+            "description": "Invalid voucher group",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/invalid_voucher_group"
+                }
+              }
+            }
+          },
+          "455": {
+            "description": "Voucher group exhausted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/voucher_group_exhausted"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/internal_server_error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/service_unavailable"
+                }
+              }
+            }
+          },
+          "599": {
+            "description": "Network connection timeout error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/network_timeout_error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Voucher_preactivate_request": {
+        "required": [
+          "voucher_amount",
+          "voucher_currency",
+          "voucher_group"
+        ],
+        "type": "object",
+        "properties": {
+          "voucher_amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "voucher_currency": {
+            "type": "string"
+          },
+          "voucher_group": {
+            "type": "string"
+          },
+          "voucher_comment": {
+            "type": "string"
+          }
+        }
+      },
+      "preactivation_response": {
+        "required": [
+          "expiry_date_time",
+          "voucher_number",
+          "voucher_serial_number"
+        ],
+        "properties": {
+          "voucher_number": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "voucher_serial_number": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "expiry_date_time": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "invalid_preactivation_request": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "invalid_amount": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "invalid_currency": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "invalid_voucher_group": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "voucher_group_exhausted": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "internal_server_error": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "service_unavailable": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "network_timeout_error": {
+        "required": [
+          "message"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "app_id": {
+        "type": "apiKey",
+        "description": "API key to authorize request",
+        "name": "appid",
+        "in": "query"
+      }
+    }
+  }
+}
